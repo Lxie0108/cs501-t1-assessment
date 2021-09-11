@@ -1,3 +1,3 @@
 web: gunicorn --chdir project server:app
 heroku ps:scale web=1
-release: python ./launch.sh db upgrade
+release: ./launch.sh db upgrade
