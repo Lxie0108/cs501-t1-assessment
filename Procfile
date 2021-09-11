@@ -1,2 +1,2 @@
-web: gunicorn --chdir project server:app
+web: gunicorn project.server:apps
 heroku ps:scale web=1
