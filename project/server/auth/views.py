@@ -54,13 +54,45 @@ class RegisterAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 202
 
+class getUserListAPI(MethodView):
+    """
+    This API helps to get a list of registered users. It will return all the registered users info in JSON format.
+    """
+    def get(self):
+        #fetch all user tuples
+        userTuples = db.session.query(User).all()
+        userList = []
+
+        for user in userTuples:
+            userObject = {
+            'admin': user.admin,
+            'email': user.email,
+            'id': user.id,
+            'registered_on': user.registered_on
+            }
+            userList.append(userObject)
+        
+        responseObject = {
+            'users': userList,
+        }
+        return make_response(jsonify(responseObject)), 201
+
+
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
+userList_view = getUserListAPI.as_view('userList_api')
 
 # add Rules for API Endpoints
 auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=registration_view,
     methods=['POST', 'GET']
+)
+
+# add new Rules For new route /users/index
+auth_blueprint.add_url_rule(
+    '/users/index',
+    view_func=userList_view,
+    methods=['GET']
 )
